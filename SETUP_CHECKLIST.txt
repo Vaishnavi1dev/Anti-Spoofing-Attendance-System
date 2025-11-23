@@ -1,0 +1,391 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║     SMART CLASSROOM ATTENDANCE SYSTEM - SETUP CHECKLIST              ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+📋 COMPLETE SETUP GUIDE - Follow in order
+
+═══════════════════════════════════════════════════════════════════════
+
+PHASE 1: PREREQUISITES
+═══════════════════════════════════════════════════════════════════════
+
+[ ] Python 3.9 or higher installed
+    → Check: python --version
+
+[ ] MongoDB installed (local) OR MongoDB Atlas account (cloud)
+    → Local: https://www.mongodb.com/try/download/community
+    → Cloud: https://www.mongodb.com/cloud/atlas/register
+
+[ ] Node.js 16+ installed (for frontend)
+    → Check: node --version
+
+[ ] Webcam connected and working
+    → Test with any camera app
+
+[ ] Git installed (optional, for version control)
+    → Check: git --version
+
+═══════════════════════════════════════════════════════════════════════
+
+PHASE 2: MONGODB SETUP
+═══════════════════════════════════════════════════════════════════════
+
+OPTION A: Local MongoDB
+─────────────────────────────────────────────────────────────────────
+
+[ ] MongoDB installed
+[ ] MongoDB service running
+    → Windows: Check Services → MongoDB Server
+    → Mac: brew services list
+    → Linux: sudo systemctl status mongod
+
+[ ] Test connection:
+    → Open terminal: mongo
+    → Should connect without errors
+
+OPTION B: MongoDB Atlas (Cloud)
+─────────────────────────────────────────────────────────────────────
+
+[ ] Account created at mongodb.com/cloud/atlas
+[ ] Free cluster created (takes 3-5 minutes)
+[ ] Database user created
+[ ] IP address whitelisted (or allow from anywhere for testing)
+[ ] Connection string copied
+    → Format: mongodb+srv://<username>:<password>@<cluster>.mongodb.net/
+
+═══════════════════════════════════════════════════════════════════════
+
+PHASE 3: BACKEND SETUP
+═══════════════════════════════════════════════════════════════════════
+
+[ ] Navigate to project directory
+    → cd smart-classroom-attendance
+
+[ ] Navigate to backend folder
+    → cd backend
+
+[ ] Install Python dependencies
+    → pip install -r requirements.txt
+    → This may take 5-10 minutes
+
+[ ] Create .env file
+    → cp .env.example .env
+    → OR manually create .env file
+
+[ ] Edit .env file with MongoDB connection
+    → For local: MONGODB_URI=mongodb://localhost:27017/
+    → For Atlas: MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/
+
+[ ] Test backend startup
+    → uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    → Should see: "Application startup complete"
+
+[ ] Verify backend is running
+    → Open browser: http://localhost:8000
+    → Should see: {"message": "Smart Classroom Attendance API", ...}
+
+[ ] Check API documentation
+    → Open browser: http://localhost:8000/docs
+    → Should see interactive Swagger UI
+
+═══════════════════════════════════════════════════════════════════════
+
+PHASE 4: DATABASE SETUP (Add Students)
+═══════════════════════════════════════════════════════════════════════
+
+[ ] Open NEW terminal (keep backend running)
+
+[ ] Navigate to project root
+    → cd smart-classroom-attendance
+
+[ ] Run database setup script
+    → python setup_database_mongo.py
+
+[ ] Add first student:
+    ┌─────────────────────────────────────────────────────────────┐
+    │ Student ID: STU001                                          │
+    │ Name: John Doe                                              │
+    │ Email: john@example.com (optional)                          │
+    │ Phone: +1234567890 (optional)                               │
+    └─────────────────────────────────────────────────────────────┘
+
+[ ] Add photos for student:
+    ┌─────────────────────────────────────────────────────────────┐
+    │ Photo 1:                                                    │
+    │   Path: C:\path\to\photo\front.jpg                          │
+    │   Type: front                                               │
+    │                                                             │
+    │ Photo 2:                                                    │
+    │   Path: C:\path\to\photo\left.jpg                           │
+    │   Type: left                                                │
+    │                                                             │
+    │ Photo 3:                                                    │
+    │   Path: C:\path\to\photo\right.jpg                          │
+    │   Type: right                                               │
+    │                                                             │
+    │ Type 'done' when finished                                   │
+    └─────────────────────────────────────────────────────────────┘
+
+[ ] Repeat for more students (recommended: 3-5 for testing)
+
+[ ] Verify students added:
+    → In setup script, select option 2 (List All Students)
+    → Should see all added students with photo counts
+
+═══════════════════════════════════════════════════════════════════════
+
+PHASE 5: TEST BACKEND API
+═══════════════════════════════════════════════════════════════════════
+
+[ ] Backend still running (http://localhost:8000)
+
+[ ] Test GET /api/students
+    → Browser: http://localhost:8000/api/students
+    → Should return JSON array of students
+
+[ ] Test API docs
+    → Browser: http://localhost:8000/docs
+    → Try "GET /api/students" endpoint
+    → Click "Try it out" → "Execute"
+    → Should see your students
+
+[ ] Test camera start
+    → In API docs: POST /api/camera/start
+    → Click "Try it out" → "Execute"
+    → Should return: {"success": true, "message": "Camera started"}
+
+[ ] Test camera status
+    → In API docs: GET /api/camera/status
+    → Should return: {"success": true, "data": {"active": true, ...}}
+
+═══════════════════════════════════════════════════════════════════════
+
+PHASE 6: FRONTEND SETUP
+═══════════════════════════════════════════════════════════════════════
+
+[ ] Navigate to frontend directory: cd frontend
+
+[ ] Install dependencies: npm install
+
+[ ] Start development server: npm run dev
+
+[ ] Open browser at http://localhost:8080
+
+[ ] Login with admin credentials
+
+[ ] Extract to a folder (e.g., frontend/)
+
+[ ] Navigate to frontend folder
+    → cd frontend
+
+[ ] Install dependencies
+    → npm install
+    → This may take 3-5 minutes
+
+[ ] Start frontend development server
+    → npm run dev
+
+[ ] Verify frontend is running
+    → Should see: "Local: http://localhost:5173"
+    → Open browser: http://localhost:5173
+
+═══════════════════════════════════════════════════════════════════════
+
+PHASE 7: INTEGRATION TESTING
+═══════════════════════════════════════════════════════════════════════
+
+[ ] Both backend and frontend running:
+    → Backend: http://localhost:8000
+    → Frontend: http://localhost:5173
+
+[ ] Test frontend connection to backend:
+    → Open frontend in browser
+    → Check browser console for errors
+    → Should connect to backend API
+
+[ ] Test live monitoring:
+    → Click "Start Monitoring" button
+    → Allow camera permissions
+    → Should see live camera feed
+
+[ ] Test face detection:
+    → Sit in front of camera
+    → Should see bounding box around your face
+
+[ ] Test face recognition:
+    → If you added your photo, should see your name
+    → If not, should see "Unknown"
+
+[ ] Test attendance logging:
+    → Check "Attendance Dashboard" tab
+    → Should see entry logged when face recognized
+
+[ ] Test anti-spoofing:
+    → Hold up a photo of someone
+    → Should be flagged as suspicious after ~30 seconds
+
+═══════════════════════════════════════════════════════════════════════
+
+PHASE 8: VERIFY ALL FEATURES
+═══════════════════════════════════════════════════════════════════════
+
+BACKEND FEATURES:
+[ ] Face detection working
+[ ] Face recognition working
+[ ] Attendance logging working
+[ ] Suspicious activity detection working
+[ ] API endpoints responding
+[ ] WebSocket streaming working
+
+FRONTEND FEATURES:
+[ ] Live camera feed displaying
+[ ] Student list showing
+[ ] Attendance dashboard working
+[ ] Suspicious activity alerts showing
+[ ] Statistics displaying
+[ ] Settings accessible
+
+DATABASE:
+[ ] Students stored in MongoDB
+[ ] Photos stored and linked
+[ ] Attendance records created
+[ ] Suspicious activities logged
+
+═══════════════════════════════════════════════════════════════════════
+
+PHASE 9: PRODUCTION READINESS (Optional)
+═══════════════════════════════════════════════════════════════════════
+
+[ ] Update CORS origins in backend/main.py
+    → Change from ["*"] to specific frontend URL
+
+[ ] Add authentication (JWT)
+    → Implement user login
+    → Protect API endpoints
+
+[ ] Enable MongoDB authentication
+    → Create database user
+    → Update connection string
+
+[ ] Use HTTPS
+    → Get SSL certificate
+    → Configure reverse proxy (nginx)
+
+[ ] Deploy backend
+    → Option 1: Docker (docker-compose up)
+    → Option 2: Cloud (Heroku, Railway, AWS)
+
+[ ] Deploy frontend
+    → Option 1: Vercel (vercel deploy)
+    → Option 2: Netlify (netlify deploy)
+
+[ ] Deploy MongoDB
+    → Use MongoDB Atlas for production
+
+═══════════════════════════════════════════════════════════════════════
+
+TROUBLESHOOTING CHECKLIST
+═══════════════════════════════════════════════════════════════════════
+
+ISSUE: MongoDB connection failed
+[ ] Check if MongoDB is running
+[ ] Verify connection string in .env
+[ ] For Atlas: Check IP whitelist
+[ ] Test connection: mongo (for local)
+
+ISSUE: Camera not working
+[ ] Check camera permissions
+[ ] Try different camera index (0, 1, 2)
+[ ] Close other apps using camera
+[ ] Restart backend
+
+ISSUE: Face not recognized
+[ ] Add more photos (3-5 per student)
+[ ] Ensure good lighting
+[ ] Use clear, front-facing photos
+[ ] Check if photos uploaded: python setup_database_mongo.py → Option 2
+
+ISSUE: Backend won't start
+[ ] Check Python version (3.9+)
+[ ] Reinstall dependencies: pip install -r requirements.txt
+[ ] Check for port conflicts (8000)
+[ ] Review error messages
+
+ISSUE: Frontend won't connect
+[ ] Check CORS settings in backend
+[ ] Verify backend is running
+[ ] Check browser console for errors
+[ ] Update API URL in frontend config
+
+═══════════════════════════════════════════════════════════════════════
+
+QUICK REFERENCE
+═══════════════════════════════════════════════════════════════════════
+
+START BACKEND:
+cd backend
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+START FRONTEND:
+cd frontend
+npm run dev
+
+ADD STUDENTS:
+python setup_database_mongo.py
+
+VIEW API DOCS:
+http://localhost:8000/docs
+
+TEST API:
+curl http://localhost:8000/api/students
+
+═══════════════════════════════════════════════════════════════════════
+
+DOCUMENTATION FILES
+═══════════════════════════════════════════════════════════════════════
+
+[ ] README_MAIN.md - Project overview
+[ ] QUICK_START.md - 10-minute setup guide
+[ ] PROJECT_STRUCTURE.md - Complete architecture
+[ ] IMPLEMENTATION_SUMMARY.md - What's built
+[ ] backend/README.md - Backend API docs
+[ ] frontend/ - React frontend application
+[ ] SETUP_CHECKLIST.txt - This file
+
+═══════════════════════════════════════════════════════════════════════
+
+✅ COMPLETION CHECKLIST
+═══════════════════════════════════════════════════════════════════════
+
+[ ] MongoDB running and accessible
+[ ] Backend API running (http://localhost:8000)
+[ ] API docs accessible (http://localhost:8000/docs)
+[ ] At least 3 students added with photos
+[ ] Frontend generated and running (http://localhost:5173)
+[ ] Camera working and detecting faces
+[ ] Face recognition working
+[ ] Attendance logging working
+[ ] Anti-spoofing detection working
+[ ] All features tested and verified
+
+═══════════════════════════════════════════════════════════════════════
+
+🎉 CONGRATULATIONS!
+═══════════════════════════════════════════════════════════════════════
+
+Your Smart Classroom Attendance System is now fully operational!
+
+Next steps:
+1. Add more students
+2. Test with real classroom scenarios
+3. Customize settings as needed
+4. Deploy to production (optional)
+
+For support, refer to:
+- QUICK_START.md for common issues
+- PROJECT_STRUCTURE.md for detailed docs
+- http://localhost:8000/docs for API reference
+
+Happy monitoring! 🚀
+
+═══════════════════════════════════════════════════════════════════════

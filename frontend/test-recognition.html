@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Face Recognition</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        video {
+            width: 100%;
+            max-width: 640px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            transform: scaleX(-1);
+        }
+        canvas {
+            display: none;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .student-card {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+            border-radius: 4px;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 Face Recognition Test</h1>
+        
+        <div class="controls">
+            <button id="startBtn" onclick="startCamera()">Start Camera</button>
+            <button id="stopBtn" onclick="stopCamera()" disabled>Stop Camera</button>
+            <button id="captureBtn" onclick="captureAndRecognize()" disabled>Capture & Recognize</button>
+        </div>
+
+        <div id="status" class="status info">
+            Click "Start Camera" to begin
+        </div>
+
+        <video id="video" autoplay playsinline></video>
+        <canvas id="canvas"></canvas>
+
+        <div id="results" class="results" style="display: none;">
+            <h3>Recognition Results:</h3>
+            <div id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let stream = null;
+        let isRecognizing = false;
+
+        function setStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+        }
+
+        async function startCamera() {
+            try {
+                setStatus('Requesting camera access...', 'info');
+                
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user'
+                    },
+                    audio: false
+                });
+
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = false;
+                document.getElementById('captureBtn').disabled = false;
+
+                setStatus('Camera started! Position your face in the frame and click "Capture & Recognize"', 'success');
+            } catch (error) {
+                console.error('Camera error:', error);
+                setStatus(`Camera error: ${error.message}`, 'error');
+            }
+        }
+
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+                
+                const video = document.getElementById('video');
+                video.srcObject = null;
+
+                document.getElementById('startBtn').disabled = false;
+                document.getElementById('stopBtn').disabled = true;
+                document.getElementById('captureBtn').disabled = true;
+
+                setStatus('Camera stopped', 'info');
+                document.getElementById('results').style.display = 'none';
+            }
+        }
+
+        async function captureAndRecognize() {
+            if (isRecognizing) {
+                setStatus('Recognition in progress, please wait...', 'info');
+                return;
+            }
+
+            isRecognizing = true;
+            setStatus('Capturing frame and recognizing...', 'info');
+
+            try {
+                const video = document.getElementById('video');
+                const canvas = document.getElementById('canvas');
+                const context = canvas.getContext('2d');
+
+                // Set canvas size to match video
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                // Draw current video frame
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                // Convert to blob
+                const blob = await new Promise(resolve => {
+                    canvas.toBlob(resolve, 'image/jpeg', 0.95);
+                });
+
+                // Send to backend
+                const formData = new FormData();
+                formData.append('file', blob, 'frame.jpg');
+
+                console.log('Sending frame to backend...');
+                const response = await fetch('http://localhost:8000/api/camera/recognize', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('Recognition result:', data);
+
+                displayResults(data);
+
+            } catch (error) {
+                console.error('Recognition error:', error);
+                setStatus(`Recognition error: ${error.message}`, 'error');
+            } finally {
+                isRecognizing = false;
+            }
+        }
+
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('results');
+            const contentDiv = document.getElementById('resultContent');
+
+            if (data.success) {
+                let html = '';
+                
+                // Show recognized students
+                if (data.detected_students && data.detected_students.length > 0) {
+                    setStatus(`✅ Found ${data.detected_students.length} student(s)!`, 'success');
+                    
+                    data.detected_students.forEach(student => {
+                        html += `
+                            <div class="student-card">
+                                <h4>✓ ${student.name}</h4>
+                                <p><strong>Student ID:</strong> ${student.student_id}</p>
+                                <p><strong>Bounding Box:</strong> [${student.bbox.join(', ')}]</p>
+                            </div>
+                        `;
+                    });
+                }
+                
+                // Show unknown persons
+                if (data.unknown_faces && data.unknown_faces.length > 0) {
+                    if (data.detected_students && data.detected_students.length > 0) {
+                        setStatus(`⚠️ Found ${data.detected_students.length} student(s) and ${data.unknown_faces.length} unknown person(s)!`, 'info');
+                    } else {
+                        setStatus(`⚠️ Detected ${data.unknown_faces.length} unknown person(s)!`, 'info');
+                    }
+                    
+                    data.unknown_faces.forEach((face, index) => {
+                        html += `
+                            <div class="student-card" style="border-left-color: #ff9800;">
+                                <h4 style="color: #ff9800;">⚠️ Unknown Person #${index + 1}</h4>
+                                <p><strong>Status:</strong> Not recognized (logged as suspicious)</p>
+                                <p><strong>Bounding Box:</strong> [${face.bbox.join(', ')}]</p>
+                                <p style="color: #666; font-size: 0.9em;">This person's photo is not in the system.</p>
+                            </div>
+                        `;
+                    });
+                }
+                
+                if (html) {
+                    contentDiv.innerHTML = html;
+                    resultsDiv.style.display = 'block';
+                } else {
+                    setStatus(`⚠️ No faces recognized (detected ${data.face_count} face(s))`, 'info');
+                    contentDiv.innerHTML = '<p>No students recognized. Make sure:</p><ul><li>Your face is clearly visible</li><li>You have uploaded photos to the system</li><li>Lighting is good</li><li>You are looking at the camera</li></ul>';
+                    resultsDiv.style.display = 'block';
+                }
+            } else {
+                setStatus('Recognition failed', 'error');
+                contentDiv.innerHTML = '<p>Recognition failed. Check console for details.</p>';
+                resultsDiv.style.display = 'block';
+            }
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            stopCamera();
+        });
+    </script>
+</body>
+</html>

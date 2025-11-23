@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: classroom_mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE:-classroom_attendance}
+    networks:
+      - classroom_network
+
+  backend:
+    build: .
+    container_name: classroom_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+    volumes:
+      - ./photos:/app/photos
+    networks:
+      - classroom_network
+
+volumes:
+  mongodb_data:
+
+networks:
+  classroom_network:
+    driver: bridge

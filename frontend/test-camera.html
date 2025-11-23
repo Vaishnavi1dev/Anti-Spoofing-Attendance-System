@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        video {
+            width: 100%;
+            max-width: 640px;
+            border: 2px solid #333;
+            border-radius: 8px;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: white;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .stop {
+            background: #dc3545;
+        }
+        .stop:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎥 Camera Test</h1>
+    <p>Test if your webcam is working</p>
+    
+    <video id="video" autoplay playsinline></video>
+    
+    <div>
+        <button id="startBtn" onclick="startCamera()">Start Camera</button>
+        <button id="stopBtn" class="stop" onclick="stopCamera()" disabled>Stop Camera</button>
+    </div>
+    
+    <p id="status">Click "Start Camera" to begin</p>
+
+    <script>
+        let stream = null;
+        const video = document.getElementById('video');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const status = document.getElementById('status');
+
+        async function startCamera() {
+            try {
+                status.textContent = 'Requesting camera access...';
+                
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    } 
+                });
+                
+                video.srcObject = stream;
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                status.textContent = '✅ Camera is working!';
+                status.style.color = 'green';
+            } catch (error) {
+                console.error('Camera error:', error);
+                status.textContent = '❌ Error: ' + error.message;
+                status.style.color = 'red';
+                
+                if (error.name === 'NotAllowedError') {
+                    status.textContent = '❌ Camera permission denied. Please allow camera access.';
+                } else if (error.name === 'NotFoundError') {
+                    status.textContent = '❌ No camera found on this device.';
+                }
+            }
+        }
+
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+                stream = null;
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                status.textContent = 'Camera stopped';
+                status.style.color = 'black';
+            }
+        }
+    </script>
+</body>
+</html>
