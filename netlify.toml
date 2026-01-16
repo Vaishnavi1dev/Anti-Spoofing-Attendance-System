@@ -1,6 +1,6 @@
 [build]
   base = "frontend"
-  command = "npm install && npm run build"
+  command = "npm install --legacy-peer-deps && npm run build"
   publish = "dist"
 
 [[redirects]]
@@ -11,3 +11,4 @@
 [build.environment]
   NODE_VERSION = "20"
   VITE_DEMO_MODE = "true"
+  NODE_OPTIONS = "--max_old_space_size=4096"
