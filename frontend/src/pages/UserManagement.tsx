@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { UserCog, Plus, Pencil, Trash2, Mail } from "lucide-react";
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card } from "@/components/ui/card";
+import { GlassCard, GlassCardContent } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { apiService } from "@/services/api";
@@ -210,11 +210,12 @@ const UserManagement = () => {
           </Button>
         </div>
 
-        <Card className="p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <UserCog className="w-5 h-5 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">All Users</h2>
-          </div>
+        <GlassCard>
+          <GlassCardContent className="pt-6">
+            <div className="flex items-center gap-2 mb-4">
+              <UserCog className="w-5 h-5 text-white" />
+              <h2 className="text-lg font-semibold text-white">All Users</h2>
+            </div>
 
           <Table>
             <TableHeader>
@@ -281,7 +282,8 @@ const UserManagement = () => {
               )}
             </TableBody>
           </Table>
-        </Card>
+          </GlassCardContent>
+        </GlassCard>
 
         {/* Add User Dialog */}
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, TrendingUp } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -94,63 +94,63 @@ const MyAttendance = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <Card className="shadow-sm">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+          <GlassCard className="shadow-sm">
+            <GlassCardHeader className="pb-3">
+              <GlassCardTitle className="text-sm font-medium text-white/70">
                 Attendance Rate
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+              </GlassCardTitle>
+            </GlassCardHeader>
+            <GlassCardContent>
               <div className="text-2xl font-bold text-success">{stats.attendanceRate}%</div>
               <p className="text-xs text-muted-foreground mt-1">
                 {stats.attended} of {stats.totalClasses} classes
               </p>
-            </CardContent>
-          </Card>
+            </GlassCardContent>
+          </GlassCard>
 
-          <Card className="shadow-sm">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+          <GlassCard className="shadow-sm">
+            <GlassCardHeader className="pb-3">
+              <GlassCardTitle className="text-sm font-medium text-white/70">
                 Total Classes
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalClasses}</div>
-              <p className="text-xs text-muted-foreground mt-1">This semester</p>
-            </CardContent>
-          </Card>
+              </GlassCardTitle>
+            </GlassCardHeader>
+            <GlassCardContent>
+              <div className="text-2xl font-bold text-white">{stats.totalClasses}</div>
+              <p className="text-xs text-white/70 mt-1">This semester</p>
+            </GlassCardContent>
+          </GlassCard>
 
-          <Card className="shadow-sm">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+          <GlassCard className="shadow-sm">
+            <GlassCardHeader className="pb-3">
+              <GlassCardTitle className="text-sm font-medium text-white/70">
                 Classes Attended
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+              </GlassCardTitle>
+            </GlassCardHeader>
+            <GlassCardContent>
               <div className="text-2xl font-bold text-success">{stats.attended}</div>
-              <p className="text-xs text-muted-foreground mt-1">Present</p>
-            </CardContent>
-          </Card>
+              <p className="text-xs text-white/70 mt-1">Present</p>
+            </GlassCardContent>
+          </GlassCard>
 
-          <Card className="shadow-sm">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+          <GlassCard className="shadow-sm">
+            <GlassCardHeader className="pb-3">
+              <GlassCardTitle className="text-sm font-medium text-white/70">
                 Avg Duration
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.avgDuration}</div>
-              <p className="text-xs text-muted-foreground mt-1">Per class</p>
-            </CardContent>
-          </Card>
+              </GlassCardTitle>
+            </GlassCardHeader>
+            <GlassCardContent>
+              <div className="text-2xl font-bold text-white">{stats.avgDuration}</div>
+              <p className="text-xs text-white/70 mt-1">Per class</p>
+            </GlassCardContent>
+          </GlassCard>
         </div>
 
         {/* Attendance Records */}
-        <Card className="shadow-sm">
-          <CardHeader>
-            <CardTitle>Attendance History</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <GlassCard className="shadow-sm">
+          <GlassCardHeader>
+            <GlassCardTitle>Attendance History</GlassCardTitle>
+          </GlassCardHeader>
+          <GlassCardContent>
             {loading ? (
               <div className="text-center py-8 text-muted-foreground">Loading...</div>
             ) : attendanceRecords.length === 0 ? (
@@ -203,8 +203,8 @@ const MyAttendance = () => {
               ))}
               </div>
             )}
-          </CardContent>
-        </Card>
+          </GlassCardContent>
+        </GlassCard>
       </div>
     </DashboardLayout>
   );

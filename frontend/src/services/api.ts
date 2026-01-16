@@ -1,6 +1,10 @@
 import { UserRole } from "@/contexts/AuthContext";
+import { isDemoMode, MockApiService } from "./mockApi";
 
-const API_BASE_URL = "http://localhost:8000/api";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+
+// Create mock service instance
+const mockService = new MockApiService();
 
 interface LoginResponse {
   access_token: string;
@@ -27,6 +31,8 @@ class ApiService {
   }
 
   async login(email: string, password: string): Promise<LoginResponse> {
+    if (isDemoMode) return mockService.login(email, password);
+    
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -42,6 +48,8 @@ class ApiService {
   }
 
   async getUserRole(userId: string): Promise<UserRole> {
+    if (isDemoMode) return mockService.getUserRole(userId);
+    
     const response = await fetch(`${API_BASE_URL}/auth/users/${userId}/role`, {
       headers: this.getAuthHeaders(),
     });
@@ -55,6 +63,8 @@ class ApiService {
   }
 
   async getCurrentUser() {
+    if (isDemoMode) return mockService.getCurrentUser();
+    
     const response = await fetch(`${API_BASE_URL}/auth/me`, {
       headers: this.getAuthHeaders(),
     });
@@ -67,6 +77,8 @@ class ApiService {
   }
 
   async updateUserRole(userId: string, role: UserRole): Promise<void> {
+    if (isDemoMode) return mockService.updateUserRole(userId, role);
+    
     const response = await fetch(`${API_BASE_URL}/auth/users/${userId}/role`, {
       method: "PUT",
       headers: this.getAuthHeaders(),
@@ -84,6 +96,8 @@ class ApiService {
     name: string,
     role: UserRole
   ): Promise<void> {
+    if (isDemoMode) return mockService.registerUser(email, password, name, role);
+    
     const response = await fetch(`${API_BASE_URL}/auth/register`, {
       method: "POST",
       headers: this.getAuthHeaders(),
@@ -97,6 +111,8 @@ class ApiService {
   }
 
   async getAllUsers() {
+    if (isDemoMode) return mockService.getAllUsers();
+    
     const response = await fetch(`${API_BASE_URL}/auth/users`, {
       headers: this.getAuthHeaders(),
     });
@@ -109,6 +125,8 @@ class ApiService {
   }
 
   async deleteUser(userId: string): Promise<void> {
+    if (isDemoMode) return mockService.deleteUser(userId);
+    
     const response = await fetch(`${API_BASE_URL}/auth/users/${userId}`, {
       method: "DELETE",
       headers: this.getAuthHeaders(),
@@ -121,6 +139,8 @@ class ApiService {
 
   // Student Management
   async getAllStudents() {
+    if (isDemoMode) return mockService.getAllStudents();
+    
     const response = await fetch(`${API_BASE_URL}/students`, {
       headers: this.getAuthHeaders(),
     });
@@ -133,6 +153,8 @@ class ApiService {
   }
 
   async getStudent(studentId: string) {
+    if (isDemoMode) return mockService.getStudent(studentId);
+    
     const response = await fetch(`${API_BASE_URL}/students/${studentId}`, {
       headers: this.getAuthHeaders(),
     });
@@ -150,6 +172,8 @@ class ApiService {
     email?: string;
     phone?: string;
   }) {
+    if (isDemoMode) return mockService.createStudent(data);
+    
     const response = await fetch(`${API_BASE_URL}/students`, {
       method: "POST",
       headers: this.getAuthHeaders(),
@@ -169,6 +193,8 @@ class ApiService {
     email?: string;
     phone?: string;
   }) {
+    if (isDemoMode) return mockService.updateStudent(studentId, data);
+    
     const response = await fetch(`${API_BASE_URL}/students/${studentId}`, {
       method: "PUT",
       headers: this.getAuthHeaders(),
@@ -183,6 +209,8 @@ class ApiService {
   }
 
   async deleteStudent(studentId: string) {
+    if (isDemoMode) return mockService.deleteStudent(studentId);
+    
     const response = await fetch(`${API_BASE_URL}/students/${studentId}`, {
       method: "DELETE",
       headers: this.getAuthHeaders(),
@@ -196,6 +224,8 @@ class ApiService {
   }
 
   async getStudentPhotos(studentId: string) {
+    if (isDemoMode) return mockService.getStudentPhotos(studentId);
+    
     const response = await fetch(`${API_BASE_URL}/students/${studentId}/photos`, {
       headers: this.getAuthHeaders(),
     });
@@ -208,6 +238,8 @@ class ApiService {
   }
 
   async getTodayAttendance() {
+    if (isDemoMode) return mockService.getTodayAttendance();
+    
     const response = await fetch(`${API_BASE_URL}/attendance/today`, {
       headers: this.getAuthHeaders(),
     });
@@ -220,6 +252,8 @@ class ApiService {
   }
 
   async getAttendanceByDate(date: string) {
+    if (isDemoMode) return mockService.getAttendanceByDate(date);
+    
     const response = await fetch(`${API_BASE_URL}/attendance/date/${date}`, {
       headers: this.getAuthHeaders(),
     });
@@ -232,6 +266,8 @@ class ApiService {
   }
 
   async getAttendanceByDateRange(startDate: string, endDate: string) {
+    if (isDemoMode) return mockService.getAttendanceByDateRange(startDate, endDate);
+    
     const response = await fetch(`${API_BASE_URL}/attendance/range?start_date=${startDate}&end_date=${endDate}`, {
       headers: this.getAuthHeaders(),
     });
@@ -244,6 +280,8 @@ class ApiService {
   }
 
   async getStudentAttendance(studentId: string, limit: number = 30) {
+    if (isDemoMode) return mockService.getStudentAttendance(studentId, limit);
+    
     const response = await fetch(`${API_BASE_URL}/attendance/student/${studentId}?limit=${limit}`, {
       headers: this.getAuthHeaders(),
     });
@@ -256,6 +294,8 @@ class ApiService {
   }
 
   async getAttendanceStats(startDate?: string, endDate?: string) {
+    if (isDemoMode) return mockService.getAttendanceStats(startDate, endDate);
+    
     let url = `${API_BASE_URL}/stats`;
     if (startDate && endDate) {
       url += `?start_date=${startDate}&end_date=${endDate}`;
@@ -273,6 +313,8 @@ class ApiService {
   }
 
   async getSuspiciousActivities(resolved: boolean = false) {
+    if (isDemoMode) return mockService.getSuspiciousActivities(resolved);
+    
     const response = await fetch(`${API_BASE_URL}/suspicious?resolved=${resolved}`, {
       headers: this.getAuthHeaders(),
     });
@@ -285,6 +327,8 @@ class ApiService {
   }
 
   async resolveSuspiciousActivity(activityId: string) {
+    if (isDemoMode) return mockService.resolveSuspiciousActivity(activityId);
+    
     const response = await fetch(`${API_BASE_URL}/suspicious/resolve`, {
       method: "POST",
       headers: this.getAuthHeaders(),
@@ -300,6 +344,8 @@ class ApiService {
 
   // Camera Management
   async startCamera() {
+    if (isDemoMode) return mockService.startCamera();
+    
     const response = await fetch(`${API_BASE_URL}/camera/start`, {
       method: "POST",
       headers: this.getAuthHeaders(),
@@ -313,6 +359,8 @@ class ApiService {
   }
 
   async stopCamera() {
+    if (isDemoMode) return mockService.stopCamera();
+    
     const response = await fetch(`${API_BASE_URL}/camera/stop`, {
       method: "POST",
       headers: this.getAuthHeaders(),
@@ -326,6 +374,8 @@ class ApiService {
   }
 
   async getCameraStatus() {
+    if (isDemoMode) return mockService.getCameraStatus();
+    
     const response = await fetch(`${API_BASE_URL}/camera/status`, {
       headers: this.getAuthHeaders(),
     });
@@ -339,8 +389,11 @@ class ApiService {
 
   // WebSocket connection for camera feed
   connectCameraWebSocket(onMessage: (data: any) => void, onError?: (error: any) => void) {
+    if (isDemoMode) return mockService.connectCameraWebSocket(onMessage, onError);
+    
     const token = localStorage.getItem("auth_token");
-    const wsUrl = `ws://localhost:8000/ws/camera?token=${token}`;
+    const wsBaseUrl = import.meta.env.VITE_WS_URL || "ws://localhost:8000";
+    const wsUrl = `${wsBaseUrl}/ws/camera?token=${token}`;
     
     const ws = new WebSocket(wsUrl);
     

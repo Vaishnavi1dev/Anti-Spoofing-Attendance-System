@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { Camera, Users, AlertTriangle, BarChart3, Settings, LogOut, CalendarCheck, UserCog, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { DotGridBackground } from "@/components/DotGridBackground";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -46,17 +47,20 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const navItems = getNavItems();
 
   return (
-    <div className="min-h-screen flex bg-background">
+    <div className="min-h-screen flex relative overflow-hidden">
+      {/* DotGrid Background */}
+      <DotGridBackground />
+      
       {/* Sidebar */}
-      <aside className="w-64 bg-sidebar text-sidebar-foreground flex flex-col">
-        <div className="p-6 border-b border-sidebar-border">
+      <aside className="relative z-20 w-64 bg-black/20 backdrop-blur-xl border-r border-white/5 text-white flex flex-col">
+        <div className="p-6 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-sidebar-primary rounded-lg flex items-center justify-center">
-              <Camera className="w-6 h-6 text-sidebar-primary-foreground" />
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center shadow-lg shadow-purple-500/50">
+              <Camera className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-lg">Smart Classroom</h1>
-              <p className="text-xs text-sidebar-foreground/70">{user?.name}</p>
+              <h1 className="font-bold text-lg text-white">Smart Classroom</h1>
+              <p className="text-xs text-gray-300">{user?.name}</p>
             </div>
           </div>
         </div>
@@ -67,10 +71,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                   isActive
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                    : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                    ? "bg-white/20 backdrop-blur-sm text-white shadow-lg"
+                    : "text-gray-300 hover:bg-white/10 hover:text-white"
                 }`
               }
             >
@@ -80,10 +84,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-sidebar-border">
+        <div className="p-4 border-t border-white/10">
           <Button
             variant="ghost"
-            className="w-full justify-start text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
+            className="w-full justify-start text-gray-300 hover:text-white hover:bg-white/10"
             onClick={logout}
           >
             <LogOut className="w-5 h-5 mr-3" />
@@ -93,8 +97,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
-        {children}
+      <main className="relative z-20 flex-1 overflow-auto">
+        <div className="p-8">
+          {children}
+        </div>
       </main>
     </div>
   );

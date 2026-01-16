@@ -1,5 +1,5 @@
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent } from "@/components/ui/card";
+import { GlassCard, GlassCardContent } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -273,8 +273,8 @@ const Students = () => {
         </div>
 
         {/* Search Bar */}
-        <Card className="mb-6 shadow-sm">
-          <CardContent className="pt-6">
+        <GlassCard className="mb-6 shadow-sm">
+          <GlassCardContent className="pt-6">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
@@ -285,8 +285,8 @@ const Students = () => {
                 className="pl-10"
               />
             </div>
-          </CardContent>
-        </Card>
+          </GlassCardContent>
+        </GlassCard>
 
         {/* Students Grid */}
         {loading ? (
@@ -300,8 +300,8 @@ const Students = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filteredStudents.map((student) => (
-              <Card key={student.student_id} className="shadow-md hover:shadow-lg transition-shadow">
-                <CardContent className="pt-6">
+              <GlassCard key={student.student_id} className="shadow-md hover:shadow-lg transition-shadow">
+                <GlassCardContent className="pt-6">
                   <div className="flex flex-col items-center text-center">
                     {/* Avatar */}
                     <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-4">
@@ -385,8 +385,8 @@ const Students = () => {
                       )}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </GlassCardContent>
+              </GlassCard>
             ))}
           </div>
         )}

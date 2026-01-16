@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar, Download, Search, Filter, Clock, CheckCircle, XCircle, Users } from "lucide-react";
 import { apiService } from "@/services/api";
 import { toast } from "sonner";
+import { DotGridBackground } from "@/components/DotGridBackground";
 
 interface AttendanceRecord {
   _id: string;
@@ -149,75 +150,77 @@ const Attendance = () => {
   };
 
   return (
-    <div className="p-8">
+    <div className="relative min-h-screen">
+      <DotGridBackground />
+      <div className="relative z-20 p-8">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Attendance Management</h1>
-        <p className="text-muted-foreground">View and manage student attendance records</p>
+        <h1 className="text-3xl font-bold text-white drop-shadow-lg mb-2">Attendance Management</h1>
+        <p className="text-white/70 drop-shadow">View and manage student attendance records</p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Total Students</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <GlassCard>
+          <GlassCardHeader className="pb-3">
+            <GlassCardTitle className="text-sm font-medium text-white/70">Total Students</GlassCardTitle>
+          </GlassCardHeader>
+          <GlassCardContent>
             <div className="flex items-center gap-2">
               <Users className="w-5 h-5 text-blue-600" />
-              <span className="text-2xl font-bold">{stats.total}</span>
+              <span className="text-2xl font-bold text-white">{stats.total}</span>
             </div>
-          </CardContent>
-        </Card>
+          </GlassCardContent>
+        </GlassCard>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Present</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <GlassCard>
+          <GlassCardHeader className="pb-3">
+            <GlassCardTitle className="text-sm font-medium text-white/70">Present</GlassCardTitle>
+          </GlassCardHeader>
+          <GlassCardContent>
             <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-green-600" />
-              <span className="text-2xl font-bold text-green-600">{stats.present}</span>
+              <CheckCircle className="w-5 h-5 text-green-400" />
+              <span className="text-2xl font-bold text-green-400">{stats.present}</span>
             </div>
-          </CardContent>
-        </Card>
+          </GlassCardContent>
+        </GlassCard>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Absent</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <GlassCard>
+          <GlassCardHeader className="pb-3">
+            <GlassCardTitle className="text-sm font-medium text-white/70">Absent</GlassCardTitle>
+          </GlassCardHeader>
+          <GlassCardContent>
             <div className="flex items-center gap-2">
-              <XCircle className="w-5 h-5 text-red-600" />
-              <span className="text-2xl font-bold text-red-600">{stats.absent}</span>
+              <XCircle className="w-5 h-5 text-red-400" />
+              <span className="text-2xl font-bold text-red-400">{stats.absent}</span>
             </div>
-          </CardContent>
-        </Card>
+          </GlassCardContent>
+        </GlassCard>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Late</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <GlassCard>
+          <GlassCardHeader className="pb-3">
+            <GlassCardTitle className="text-sm font-medium text-white/70">Late</GlassCardTitle>
+          </GlassCardHeader>
+          <GlassCardContent>
             <div className="flex items-center gap-2">
-              <Clock className="w-5 h-5 text-yellow-600" />
-              <span className="text-2xl font-bold text-yellow-600">{stats.late}</span>
+              <Clock className="w-5 h-5 text-yellow-400" />
+              <span className="text-2xl font-bold text-yellow-400">{stats.late}</span>
             </div>
-          </CardContent>
-        </Card>
+          </GlassCardContent>
+        </GlassCard>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Attendance Rate</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{stats.attendanceRate}%</div>
-          </CardContent>
-        </Card>
+        <GlassCard>
+          <GlassCardHeader className="pb-3">
+            <GlassCardTitle className="text-sm font-medium text-white/70">Attendance Rate</GlassCardTitle>
+          </GlassCardHeader>
+          <GlassCardContent>
+            <div className="text-2xl font-bold text-blue-400">{stats.attendanceRate}%</div>
+          </GlassCardContent>
+        </GlassCard>
       </div>
 
       {/* Filters and Actions */}
-      <Card className="mb-6">
-        <CardContent className="pt-6">
+      <GlassCard className="mb-6">
+        <GlassCardContent className="pt-6">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Date Picker */}
             <div className="flex items-center gap-2">
@@ -262,15 +265,15 @@ const Attendance = () => {
               Export CSV
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </GlassCardContent>
+      </GlassCard>
 
       {/* Attendance Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Attendance Records - {selectedDate}</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <GlassCard>
+        <GlassCardHeader>
+          <GlassCardTitle>Attendance Records - {selectedDate}</GlassCardTitle>
+        </GlassCardHeader>
+        <GlassCardContent>
           {loading ? (
             <div className="text-center py-8 text-muted-foreground">Loading...</div>
           ) : filteredRecords.length === 0 ? (
@@ -310,8 +313,9 @@ const Attendance = () => {
               </table>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </GlassCardContent>
+      </GlassCard>
+      </div>
     </div>
   );
 };

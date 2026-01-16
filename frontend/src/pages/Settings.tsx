@@ -1,5 +1,5 @@
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { GlassCard, GlassCardContent, GlassCardDescription, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
@@ -27,11 +27,11 @@ const Settings = () => {
         </div>
 
         {/* System Status */}
-        <Card className="mb-6 shadow-md">
-          <CardHeader>
-            <CardTitle>System Status</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <GlassCard className="mb-6 shadow-md">
+          <GlassCardHeader>
+            <GlassCardTitle>System Status</GlassCardTitle>
+          </GlassCardHeader>
+          <GlassCardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="flex items-center justify-between p-3 bg-success-light rounded-lg">
                 <div className="flex items-center gap-3">
@@ -55,16 +55,16 @@ const Settings = () => {
                 <Badge className="bg-success text-success-foreground">Ready</Badge>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </GlassCardContent>
+        </GlassCard>
 
         {/* Detection Settings */}
-        <Card className="mb-6 shadow-md">
-          <CardHeader>
-            <CardTitle>Detection Parameters</CardTitle>
-            <CardDescription>Adjust sensitivity and timing for face recognition</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
+        <GlassCard className="mb-6 shadow-md">
+          <GlassCardHeader>
+            <GlassCardTitle>Detection Parameters</GlassCardTitle>
+            <GlassCardDescription>Adjust sensitivity and timing for face recognition</GlassCardDescription>
+          </GlassCardHeader>
+          <GlassCardContent className="space-y-6">
             <div>
               <div className="flex items-center justify-between mb-2">
                 <Label>Suspicion Threshold</Label>
@@ -136,8 +136,8 @@ const Settings = () => {
                 Time before marking student as absent after losing face detection
               </p>
             </div>
-          </CardContent>
-        </Card>
+          </GlassCardContent>
+        </GlassCard>
 
         {/* Save Button */}
         <div className="flex justify-end">

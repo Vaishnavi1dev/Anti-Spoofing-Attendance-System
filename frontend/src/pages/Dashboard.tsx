@@ -1,5 +1,5 @@
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GlassCard, GlassCardContent, GlassCardHeader, GlassCardTitle } from "@/components/ui/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Play, Square, Save, Camera, AlertTriangle, CheckCircle2, Clock } from "lucide-react";
@@ -132,8 +132,8 @@ const Dashboard = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <Card className="shadow-sm">
-            <CardContent className="pt-6">
+          <GlassCard className="shadow-sm">
+            <GlassCardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Present</p>
@@ -143,11 +143,11 @@ const Dashboard = () => {
                   <CheckCircle2 className="w-6 h-6 text-success" />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </GlassCardContent>
+          </GlassCard>
 
-          <Card className="shadow-sm">
-            <CardContent className="pt-6">
+          <GlassCard className="shadow-sm">
+            <GlassCardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Suspicious</p>
@@ -157,11 +157,11 @@ const Dashboard = () => {
                   <AlertTriangle className="w-6 h-6 text-warning" />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </GlassCardContent>
+          </GlassCard>
 
-          <Card className="shadow-sm">
-            <CardContent className="pt-6">
+          <GlassCard className="shadow-sm">
+            <GlassCardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Total</p>
@@ -171,27 +171,27 @@ const Dashboard = () => {
                   <Camera className="w-6 h-6 text-primary" />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </GlassCardContent>
+          </GlassCard>
         </div>
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Camera Feed */}
           <div className="lg:col-span-2">
-            <Card className="shadow-md">
-              <CardHeader>
+            <GlassCard className="shadow-md">
+              <GlassCardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2">
+                  <GlassCardTitle className="flex items-center gap-2">
                     <Camera className="w-5 h-5" />
                     Camera Feed
-                  </CardTitle>
+                  </GlassCardTitle>
                   <Badge variant={isMonitoring ? "default" : "secondary"}>
                     {isMonitoring ? "Live" : "Stopped"}
                   </Badge>
                 </div>
-              </CardHeader>
-              <CardContent>
+              </GlassCardHeader>
+              <GlassCardContent>
                 <div className="aspect-video bg-black rounded-lg relative overflow-hidden">
                   <CameraFeed isActive={isMonitoring} onError={handleCameraError} />
                 </div>
@@ -213,20 +213,20 @@ const Dashboard = () => {
                     Save Report
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
+              </GlassCardContent>
+            </GlassCard>
           </div>
 
           {/* Alerts Panel */}
           <div className="lg:col-span-1">
-            <Card className="shadow-md h-full">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+            <GlassCard className="shadow-md h-full">
+              <GlassCardHeader>
+                <GlassCardTitle className="flex items-center gap-2">
                   <AlertTriangle className="w-5 h-5" />
                   Live Alerts
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+                </GlassCardTitle>
+              </GlassCardHeader>
+              <GlassCardContent>
                 <div className="space-y-3 max-h-[500px] overflow-y-auto">
                   {suspiciousActivities.length === 0 ? (
                     <div className="text-center py-8">
@@ -285,8 +285,8 @@ const Dashboard = () => {
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
+              </GlassCardContent>
+            </GlassCard>
           </div>
         </div>
       </div>
